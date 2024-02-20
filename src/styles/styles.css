@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Anta&display=swap');
+
+body {
+  font-family: 'Anta', sans-serif;
+}
+
+header {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  border-bottom: 1px solid rgb(242, 238, 238);
+}
+input {
+  outline: none;
+  border: none;
+  border: 1px solid rgb(201, 199, 199);
+  border-radius: 3rem;
+  padding: 0.5rem 2rem;
+}
+.input {
+  position: relative;
+}
+
+button {
+  position: absolute;
+  border: none;
+  top: 5px;
+  right: 1px;
+  border-radius: 3rem;
+  background-color: transparent;
+}
