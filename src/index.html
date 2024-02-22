@@ -12,14 +12,9 @@
   <header>
     <div class="input">
       <form class="search-form" id="search-form">
-        <input type="text" name="searchQuery" autocomplete="off" placeholder="Search images..." />
+        <input class="search-input" type="text" name="searchQuery" autocomplete="off" placeholder="Search images..." />
         <button>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
-            <g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-              <circle cx="11" cy="11" r="8" />
-              <path d="M21 21l-4.35-4.35" />
-            </g>
-          </svg>
+          search
         </button>
       </form>
 
@@ -31,12 +26,16 @@
       <div class="gallery">
         <!-- Obraz karty -->
       </div>
+      <button class="loader">
+      </button>
+      <button class="load-more-btn">Load More</button>
 
     </div>
   </main>
   <footer>
 
   </footer>
+  <script src="index.js" type="module"></script>
 </body>
 
 </html>
