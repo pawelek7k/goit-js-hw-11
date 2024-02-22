@@ -6,45 +6,47 @@ const form = document.querySelector('.search-form');
 const gallery = document.querySelector('.gallery');
 const loader = document.querySelector('.loader');
 const input = document.querySelector('.search-input');
+let page = 0;
 
 loader.style.display = 'none';
-form.addEventListener('submit', event => {
+
+form.addEventListener('submit', async event => {
   event.preventDefault();
   gallery.innerHTML = '';
   loader.style.display = 'block';
 
   const inputValue = input.value;
 
-  getImages(inputValue)
-    .then(data => {
-      loader.style.display = 'none';
+  try {
+    const data = await getImages(inputValue);
 
-      if (!data.hits.length) {
-        Notiflix.Notify.failure('This is not in our database');
-      }
+    loader.style.display = 'none';
 
-      gallery.innerHTML = createMarkup(data.hits);
+    if (!data.hits.length) {
+      Notiflix.Notify.failure('This is not in our database');
+    }
 
-      const refreshPage = new SimpleLightbox('.gallery a', {
-        captions: true,
-        captionsData: 'alt',
-        captionDelay: 250,
-      });
-      refreshPage.refresh();
+    gallery.innerHTML = createMarkup(data.hits);
 
-      form.reset();
-    })
-    .catch(err => {
-      loader.style.display = 'none';
-      console.log(err);
+    const refreshPage = new SimpleLightbox('.gallery a', {
+      captions: true,
+      captionsData: 'alt',
+      captionDelay: 250,
     });
+    refreshPage.refresh();
+
+    form.reset();
+  } catch (error) {
+    loader.style.display = 'none';
+    console.log(error);
+  }
 });
 
-function getImages(name) {
+async function getImages(name) {
   const key = '42475479-1764a7314469942521760576b';
 
   if (name.includes(' ')) {
-    name.splice(' ').join('+');
+    name = name.split(' ').join('+');
   }
 
   const searchParams = new URLSearchParams({
@@ -55,12 +57,13 @@ function getImages(name) {
     safesearch: true,
   });
 
-  return fetch(`https://pixabay.com/api/?${searchParams}`).then(res => {
-    if (!res.ok) {
-      throw new Error(res.statusText);
-    }
-    return res.json();
-  });
+  const response = await fetch(`https://pixabay.com/api/?${searchParams}`);
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+
+  return response.json();
 }
 
 function createMarkup(arr) {
