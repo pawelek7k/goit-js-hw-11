@@ -7,8 +7,8 @@ const loader = document.querySelector('.loader');
 const input = document.querySelector('.search-input');
 
 loader.style.display = 'none';
-form.addEventListener('submit', e => {
-  e.preventDefault();
+form.addEventListener('submit', event => {
+  event.preventDefault();
   gallery.innerHTML = '';
   loader.style.display = 'block';
 
