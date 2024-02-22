@@ -35,7 +35,6 @@ form.addEventListener('submit', async event => {
     });
     refreshPage.refresh();
 
-    // Płynne przewijanie strony po wywołaniu żądania i przy renderowaniu każdej następnej grupy obrazków
     scrollToNextGroup();
   } catch (error) {
     loader.style.display = 'none';
