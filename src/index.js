@@ -35,7 +35,8 @@ form.addEventListener('submit', async event => {
     });
     refreshPage.refresh();
 
-    form.reset();
+    // Płynne przewijanie strony po wywołaniu żądania i przy renderowaniu każdej następnej grupy obrazków
+    scrollToNextGroup();
   } catch (error) {
     loader.style.display = 'none';
     console.log(error);
@@ -108,4 +109,42 @@ function createMarkup(arr) {
         </li>`
     )
     .join('');
+}
+
+function scrollToNextGroup() {
+  const { height: cardHeight } = document
+    .querySelector('.gallery')
+    .lastElementChild.getBoundingClientRect();
+
+  window.scrollBy({
+    top: cardHeight,
+    behavior: 'smooth',
+  });
+}
+
+window.addEventListener('scroll', async () => {
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+    const inputValue = input.value;
+    await loadMoreImages(inputValue);
+  }
+});
+
+async function loadMoreImages(name) {
+  try {
+    const data = await getImages(name);
+
+    loader.style.display = 'none';
+
+    if (!data.hits.length) {
+      Notiflix.Notify.failure('No more images to load');
+      return;
+    }
+
+    gallery.innerHTML += createMarkup(data.hits);
+
+    scrollToNextGroup();
+  } catch (error) {
+    loader.style.display = 'none';
+    console.log(error);
+  }
 }
