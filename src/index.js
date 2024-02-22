@@ -6,49 +6,48 @@ const form = document.querySelector('.search-form');
 const gallery = document.querySelector('.gallery');
 const loader = document.querySelector('.loader');
 const input = document.querySelector('.search-input');
-let page = 0;
+const lightbox = new SimpleLightbox('.gallery a');
 
 loader.style.display = 'none';
 
 form.addEventListener('submit', async event => {
   event.preventDefault();
-  gallery.innerHTML = '';
-  loader.style.display = 'block';
-
-  const inputValue = input.value;
+  const inputValue = input.value.trim();
+  if (!inputValue) return;
 
   try {
     const data = await getImages(inputValue);
 
-    loader.style.display = 'none';
-
     if (!data.hits.length) {
-      Notiflix.Notify.failure('This is not in our database');
+      Notiflix.Notify.failure('No images found');
+      return;
     }
 
     gallery.innerHTML = createMarkup(data.hits);
-
-    const refreshPage = new SimpleLightbox('.gallery a', {
-      captions: true,
-      captionsData: 'alt',
-      captionDelay: 250,
-    });
-    refreshPage.refresh();
-
+    lightbox.refresh();
     scrollToNextGroup();
   } catch (error) {
-    loader.style.display = 'none';
     console.log(error);
+    Notiflix.Notify.failure('Failed to fetch images');
+  }
+});
+
+window.addEventListener('scroll', async () => {
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+    const inputValue = input.value.trim();
+    if (!inputValue) return;
+
+    try {
+      await loadMoreImages(inputValue);
+    } catch (error) {
+      console.log(error);
+      Notiflix.Notify.failure('Failed to load more images');
+    }
   }
 });
 
 async function getImages(name) {
   const key = '42475479-1764a7314469942521760576b';
-
-  if (name.includes(' ')) {
-    name = name.split(' ').join('+');
-  }
-
   const searchParams = new URLSearchParams({
     key: key,
     q: name,
@@ -66,6 +65,21 @@ async function getImages(name) {
   return response.json();
 }
 
+async function loadMoreImages(name) {
+  loader.style.display = 'block';
+  const data = await getImages(name);
+  loader.style.display = 'none';
+
+  if (!data.hits.length) {
+    Notiflix.Notify.info('No more images to load');
+    return;
+  }
+
+  gallery.innerHTML += createMarkup(data.hits);
+  lightbox.refresh();
+  scrollToNextGroup();
+}
+
 function createMarkup(arr) {
   return arr
     .map(
@@ -77,73 +91,37 @@ function createMarkup(arr) {
         views,
         comments,
         downloads,
-      }) =>
-        `<li class="gallery-item">
-          <a class="gallery-link" href="${largeImageURL}">
-            <img
-              class="gallery-image"
-              src="${webformatURL}"
-              alt="${tags}"
-              width="298"
-            />
-          </a>
-          <div class="container-stats">
-            <div class="block">
-              <h2 class="tittle">Likes</h2>
-              <p class="amount">${likes}</p>
-            </div>
-            <div class="block">
-              <h2 class="tittle">Views</h2>
-              <p class="amount">${views}</p>
-            </div>
-            <div class="block">
-              <h2 class="tittle">Comments</h2>
-              <p class="amount">${comments}</p>
-            </div>
-            <div class="block">
-              <h2 class="tittle">Downloads</h2>
-              <p class="amount">${downloads}</p>
-            </div>
-          </div>
-        </li>`
+      }) => `
+    <li class="gallery-item">
+      <a class="gallery-link" href="${largeImageURL}">
+        <img class="gallery-image" src="${webformatURL}" alt="${tags}" width="298" />
+      </a>
+      <div class="container-stats">
+        <div class="block">
+          <h2 class="title">Likes</h2>
+          <p class="amount">${likes}</p>
+        </div>
+        <div class="block">
+          <h2 class="title">Views</h2>
+          <p class="amount">${views}</p>
+        </div>
+        <div class="block">
+          <h2 class="title">Comments</h2>
+          <p class="amount">${comments}</p>
+        </div>
+        <div class="block">
+          <h2 class="title">Downloads</h2>
+          <p class="amount">${downloads}</p>
+        </div>
+      </div>
+    </li>`
     )
     .join('');
 }
 
 function scrollToNextGroup() {
-  const { height: cardHeight } = document
+  const cardHeight = document
     .querySelector('.gallery')
-    .lastElementChild.getBoundingClientRect();
-
-  window.scrollBy({
-    top: cardHeight,
-    behavior: 'smooth',
-  });
-}
-
-window.addEventListener('scroll', async () => {
-  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
-    const inputValue = input.value;
-    await loadMoreImages(inputValue);
-  }
-});
-
-async function loadMoreImages(name) {
-  try {
-    const data = await getImages(name);
-
-    loader.style.display = 'none';
-
-    if (!data.hits.length) {
-      Notiflix.Notify.failure('No more images to load');
-      return;
-    }
-
-    gallery.innerHTML += createMarkup(data.hits);
-
-    scrollToNextGroup();
-  } catch (error) {
-    loader.style.display = 'none';
-    console.log(error);
-  }
+    .lastElementChild.getBoundingClientRect().height;
+  window.scrollBy({ top: cardHeight, behavior: 'smooth' });
 }
