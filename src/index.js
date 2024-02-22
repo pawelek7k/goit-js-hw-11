@@ -1,3 +1,4 @@
+import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
@@ -19,11 +20,7 @@ form.addEventListener('submit', event => {
       loader.style.display = 'none';
 
       if (!data.hits.length) {
-        iziToast.error({
-          title: 'Error',
-          message:
-            'Sorry, there are no images matching your search query. Please try again!',
-        });
+        Notiflix.Notify.failure('This is not in our database');
       }
 
       gallery.innerHTML = createMarkup(data.hits);
