@@ -7,6 +7,7 @@ const gallery = document.querySelector('.gallery');
 const form = document.querySelector('.search-form');
 const loader = document.querySelector('.loader');
 const input = document.querySelector('.search-input');
+let lightbox;
 
 loader.style.display = 'none';
 fetchImagesBtn.style.display = 'none';
@@ -21,7 +22,6 @@ form.addEventListener('submit', async event => {
 
   try {
     loader.style.display = 'block';
-
     const data = await getImages(inputValue, currentPage);
     loader.style.display = 'none';
 
@@ -36,19 +36,20 @@ form.addEventListener('submit', async event => {
     );
     gallery.innerHTML = renderImages(data.hits);
 
-    const refreshPage = new SimpleLightbox('.gallery a', {
-      captions: true,
-      captionsData: 'alt',
-      captionDelay: 250,
-    });
-    refreshPage.refresh();
+    if (!lightbox) {
+      lightbox = new SimpleLightbox('.gallery a', {
+        captions: true,
+        captionsData: 'alt',
+        captionDelay: 250,
+      });
+    }
 
     fetchImagesBtn.style.display = 'block';
+    obrazków;
     scrollToTop();
   } catch (error) {
     console.error(error);
     loader.style.display = 'none';
-    fetchImagesBtn.style.display = 'none';
     Notiflix.Notify.failure('Failed to fetch images');
   }
 });
@@ -68,7 +69,6 @@ async function getImages(name, page) {
   const response = await fetch(`https://pixabay.com/api/?${searchParams}`);
   if (!response.ok) {
     throw new Error(response.statusText);
-    fetchImagesBtn.style.display = 'none';
   }
   return response.json();
 }
@@ -88,10 +88,13 @@ fetchImagesBtn.addEventListener('click', async () => {
     }
 
     gallery.innerHTML += renderImages(data.hits);
+
+    if (lightbox) {
+      lightbox.refresh();
+    }
   } catch (error) {
     console.error(error);
     loader.style.display = 'none';
-    fetchImagesBtn.style.display = 'none';
     Notiflix.Notify.failure('Failed to load more images');
   }
 });
