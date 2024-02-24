@@ -11,22 +11,29 @@ header {
   display: flex;
   justify-content: center;
   padding: 1rem;
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.577);
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 999;
-  background-color: rgba(0, 0, 0, 0.584);
+  background-color: rgba(0, 0, 0, 0.776);
 }
 input {
   outline: none;
   border: none;
-  border: 1px solid rgba(255, 255, 255, 0.817);
+  border: 1px solid rgba(255, 255, 255, 0.577);
   border-radius: 3rem;
   padding: 0.5rem 4rem 0.5rem 2rem;
   background-color: black;
   color: rgba(255, 255, 255, 0.577);
+  transition: 250ms;
+}
+
+input:hover,
+input:active,
+input:focus {
+  border: 1px solid white;
 }
 .input {
   position: relative;
