@@ -32,7 +32,7 @@ input {
   position: relative;
 }
 
-button {
+.search-btn {
   position: absolute;
   border: none;
   top: 7px;
@@ -123,6 +123,12 @@ img {
 }
 
 #load-more-btn {
-  width: 30px;
-  background-color: green;
+  background-color: transparent;
+  border: none;
+  border-radius: 2rem;
+  padding: 0.5rem 2rem;
+  border: 1px solid white;
+  color: white;
+  margin: 3rem 0rem;
+  cursor: pointer;
 }
