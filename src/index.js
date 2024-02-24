@@ -9,7 +9,7 @@ const loader = document.querySelector('.loader');
 const input = document.querySelector('.search-input');
 
 loader.style.display = 'none';
-fetchImagesBtn.style.display = 'none'; // Ukrywamy przycisk "Load More" na początku
+fetchImagesBtn.style.display = 'none';
 
 let currentPage = 1;
 const perPage = 40;
@@ -20,10 +20,10 @@ form.addEventListener('submit', async event => {
   if (!inputValue) return;
 
   try {
-    loader.style.display = 'block'; // Pokazujemy loader podczas ładowania nowych obrazków
+    loader.style.display = 'block';
 
     const data = await getImages(inputValue, currentPage);
-    loader.style.display = 'none'; // Ukrywamy loader po załadowaniu obrazków
+    loader.style.display = 'none';
 
     if (!data.hits.length) {
       Notiflix.Notify.failure('No images found for this search term');
@@ -48,6 +48,7 @@ form.addEventListener('submit', async event => {
   } catch (error) {
     console.error(error);
     loader.style.display = 'none';
+    fetchImagesBtn.style.display = 'none';
     Notiflix.Notify.failure('Failed to fetch images');
   }
 });
@@ -67,6 +68,7 @@ async function getImages(name, page) {
   const response = await fetch(`https://pixabay.com/api/?${searchParams}`);
   if (!response.ok) {
     throw new Error(response.statusText);
+    fetchImagesBtn.style.display = 'none';
   }
   return response.json();
 }
