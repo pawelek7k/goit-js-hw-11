@@ -2,16 +2,16 @@
 
 body {
   font-family: 'Anta', sans-serif;
-  background-color: rgb(123, 119, 119);
+  background-color: rgb(117, 114, 114);
   color: rgba(255, 255, 255, 0.623);
-  margin-top: 10rem;
+  margin-top: 8rem;
 }
 
 header {
   display: flex;
   justify-content: center;
   padding: 1rem;
-  border-bottom: 1px solid rgba(75, 3, 3, 0.817);
+  border-bottom: 1px solid white;
   position: fixed;
   top: 0;
   left: 0;
@@ -22,7 +22,7 @@ header {
 input {
   outline: none;
   border: none;
-  border: 1px solid rgba(75, 3, 3, 0.817);
+  border: 1px solid rgba(255, 255, 255, 0.817);
   border-radius: 3rem;
   padding: 0.5rem 4rem 0.5rem 2rem;
   background-color: black;
@@ -40,13 +40,13 @@ input {
   border-radius: 3rem;
   cursor: pointer;
   background-color: transparent;
-  color: rgba(75, 3, 3, 0.817);
+  color: rgba(255, 255, 255, 0.623);
   font-family: 'Anta', sans-serif;
   transition: 250ms;
 }
 
 button:hover {
-  color: red;
+  color: white;
 }
 
 .gallery {
