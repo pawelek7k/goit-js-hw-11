@@ -45,7 +45,6 @@ form.addEventListener('submit', async event => {
     }
 
     fetchImagesBtn.style.display = 'block';
-    obrazków;
     scrollToTop();
   } catch (error) {
     console.error(error);
