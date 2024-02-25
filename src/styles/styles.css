@@ -58,7 +58,7 @@ button:hover {
 
 .gallery {
   display: grid;
-  grid-template-columns: repeat(4, 300px);
+  grid-template-columns: repeat(5, 300px);
   gap: 2rem;
 }
 
