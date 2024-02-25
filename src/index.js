@@ -7,10 +7,12 @@ const gallery = document.querySelector('.gallery');
 const form = document.querySelector('.search-form');
 const loader = document.querySelector('.loader');
 const input = document.querySelector('.search-input');
+const topScrollBtn = document.querySelector('.scroll-top');
 let lightbox;
 
 loader.style.display = 'none';
 fetchImagesBtn.style.display = 'none';
+topScrollBtn.style.display = 'none';
 
 let currentPage = 1;
 const perPage = 40;
@@ -22,12 +24,16 @@ form.addEventListener('submit', async event => {
 
   try {
     loader.style.display = 'block';
+    topScrollBtn.style.display = 'block';
+    currentPage = 1;
     const data = await getImages(inputValue, currentPage);
     loader.style.display = 'none';
 
     if (!data.hits.length) {
       Notiflix.Notify.failure('No images found for this search term');
       gallery.innerHTML = '';
+      topScrollBtn.style.display = 'none';
+      fetchImagesBtn.style.display = 'none';
       return;
     }
 
@@ -35,6 +41,12 @@ form.addEventListener('submit', async event => {
       `Found ${data.totalHits} images for "${inputValue}"`
     );
     gallery.innerHTML = renderImages(data.hits);
+
+    if (data.totalHits > perPage) {
+      fetchImagesBtn.style.display = 'block';
+    } else {
+      fetchImagesBtn.style.display = 'none';
+    }
 
     if (!lightbox) {
       lightbox = new SimpleLightbox('.gallery a', {
@@ -44,10 +56,10 @@ form.addEventListener('submit', async event => {
       });
     }
 
-    fetchImagesBtn.style.display = 'block';
     scrollToTop();
   } catch (error) {
     console.error(error);
+    topScrollBtn.style.display = 'none';
     loader.style.display = 'none';
     Notiflix.Notify.failure('Failed to fetch images');
   }
@@ -68,6 +80,7 @@ async function getImages(name, page) {
   const response = await fetch(`https://pixabay.com/api/?${searchParams}`);
   if (!response.ok) {
     throw new Error(response.statusText);
+    topScrollBtn.style.display = 'none';
   }
   return response.json();
 }
@@ -95,6 +108,7 @@ fetchImagesBtn.addEventListener('click', async () => {
     console.error(error);
     loader.style.display = 'none';
     Notiflix.Notify.failure('Failed to load more images');
+    topScrollBtn.style.display = 'none';
   }
 });
 
@@ -142,3 +156,7 @@ function renderImages(images) {
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+topScrollBtn.addEventListener('click', () => {
+  scrollToTop();
+});
