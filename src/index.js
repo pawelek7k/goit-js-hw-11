@@ -37,9 +37,7 @@ form.addEventListener('submit', async event => {
       return;
     }
 
-    Notiflix.Notify.success(
-      `Found ${data.totalHits} images for "${inputValue}"`
-    );
+    Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
     gallery.innerHTML = renderImages(data.hits);
 
     if (data.totalHits > perPage) {
