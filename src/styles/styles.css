@@ -140,7 +140,7 @@ img {
   border: 1px solid rgba(0, 0, 0, 0.512);
   background-color: black;
   padding: 1rem;
-  border-radius: 50%;
+  border-radius: 2rem;
   color: rgba(255, 255, 255, 0.81);
   font-family: 'Anta', sans-serif;
   cursor: pointer;
@@ -162,31 +162,4 @@ img {
   color: white;
   margin: 3rem 0rem;
   cursor: pointer;
-}
-
-@media only screen and (max-width: 768px) {
-  body {
-    margin-top: 5rem;
-  }
-  .gallery {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    padding: 0 1rem;
-  }
-}
-
-@media only screen and (max-width: 1300px) {
-  .gallery {
-    grid-template-columns: repeat(3, 300px);
-    gap: 2rem;
-    padding: 0.5rem;
-  }
-}
-
-@media only screen and (max-width: 1000px) {
-  .gallery {
-    grid-template-columns: repeat(2, 300px);
-    gap: 2rem;
-    padding: 0.5rem;
-  }
 }
